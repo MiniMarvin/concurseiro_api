@@ -1,9 +1,9 @@
 {
-  "name"         : "node-web-scrape",
+  "name"         : "bot_concursos",
   "version"      : "0.0.1",
-  "description"  : "Scrape le web.",
+  "description"  : "Make a web scraping from https://www.concursosnobrasil.com.br/ to get concurse information and them show to any user useing API.AI",
   "main"         : "server.js",
-  "author"       : "Scotch",
+  "author"       : "Caio Moreira Gomes",
   "dependencies" : {
     "express"    : "latest",
     "request"    : "latest",
