@@ -9,6 +9,7 @@
     "request"    : "latest",
     "cheerio"    : "latest",
     "body-parser": "latest",
-    "apiai"      : "latest"
+    "apiai"      : "latest",
+    "lodash"     : "latest"
   }
 }
