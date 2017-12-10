@@ -1,15 +1,16 @@
 {
-  "name"         : "bot_concursos",
-  "version"      : "0.0.1",
-  "description"  : "Make a web scraping from https://www.concursosnobrasil.com.br/ to get concurse information and them show to any user useing API.AI",
-  "main"         : "server.js",
-  "author"       : "Caio Moreira Gomes",
-  "dependencies" : {
-    "express"    : "latest",
-    "request"    : "latest",
-    "cheerio"    : "latest",
+  "name": "bot_concursos",
+  "version": "0.0.1",
+  "description": "Make a web scraping from https://www.concursosnobrasil.com.br/ to get concurse information and them show to any user useing API.AI",
+  "main": "server.js",
+  "author": "Caio Moreira Gomes",
+  "dependencies": {
+    "apiai": "latest",
     "body-parser": "latest",
-    "apiai"      : "latest",
-    "lodash"     : "latest"
+    "cheerio": "latest",
+    "express": "latest",
+    "lodash": "latest",
+    "mongodb": "^3.0.0-rc0",
+    "request": "latest"
   }
 }

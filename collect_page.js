@@ -1,10 +1,9 @@
 /**
- * This software is intent to make downloads of the public contest data in the Brazil country
+ * @Author: Caio M. Gomes
+ * @Project: Concurseiro Bot and API
+ * @Data: December 2017
  * 
- * The steps that still needs to be done(MVP):
- * -> Configure the database.
- * -> Make the chatbot flux to get this data.
- * -> Push into Heroku.
+ * This software is intent to make downloads of the public contest data in the Brazil country
  * 
  * Future plans:
  * -> Make the bot itself receive the data of the place from the users acount.
@@ -14,15 +13,15 @@
 
 "use strict";
 
-var express = require('express');
-var fs = require('fs');
-var request = require('request');
-var cheerio = require('cheerio');
-var app     = express();
-var _       = require('lodash');
+let express = require('express');
+let fs = require('fs');
+let request = require('request');
+let cheerio = require('cheerio');
+let app     = express();
+let _       = require('lodash');
 let mongo   = require('mongodb');
 
-var estados = {
+let estados = {
     // Define a região de cada estado
     "Acre": {
         regiao: "norte",
@@ -161,6 +160,56 @@ var estados = {
     }
 };
 
+
+/*******************************************************
+ * Connection to Database Instructions and functions   *
+ *******************************************************/
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+
+// Connection URL
+const url = 'mongodb://localhost';
+
+// Database Name
+const dbName = 'Base_Concurseiro';
+
+
+const insertDocument = function(db, insert_element, callback) {
+  // Get the documents collection
+  const collection = db.collection('documents');
+  // Insert some documents
+  collection.insertOne(insert_element, function(err, result) {
+    assert.equal(err, null);
+    console.log("Inserted documents into the collection:");
+    console.log(insert_element);
+    callback(result);
+  });
+};
+
+const findDocuments = function(db, restriction, callback) {
+  // Get the documents collection
+  const collection = db.collection('documents');
+  // Find some documents
+  collection.find(restriction).toArray(function(err, docs) {
+    assert.equal(err, null);
+    console.log("Found the following records");
+    console.log(docs);
+    callback(docs);
+  });
+};
+
+const removeDocuments = function(db, delete_pattern, callback) {
+  // Get the documents collection
+  const collection = db.collection('documents');
+  collection.deleteMany(delete_pattern, function(err, result) {
+    assert.equal(err, null);
+    console.log("Removed the document from pattern:");
+    console.log(delete_pattern);
+    callback(result);
+  });    
+};
+//-----------------------------------------------------//
+
 let data_obj = function (){};
 data_obj.prototype.data_list = [];
 
@@ -220,11 +269,11 @@ function getConcurso(state, callback) {
                         let links = $(this).find("a"); // Capture links
                         
                         data_list.push({
-                           "estado": acronym,
-                           "nome": $(vacancy[0]).text(),
-                           "profissionais": professionals.text(),
-                           "link": $(links[0]).attr("href"),
-                           "vagas": $(data[1]).text()
+                           'estado': acronym,
+                           'nome': $(vacancy[0]).text(),
+                           'profissionais': professionals.text(),
+                           'link': $(links[0]).attr('href'),
+                           'vagas': $(data[1]).text()
                         });
                     }
                 });
@@ -245,21 +294,54 @@ function register_in_db(data) {
     console.log("----------------------------------------------------");
     console.log("CALLBACK DATA!!!!!!");
     
-    for (var i = 0; i < data.length; i++) {
-        let keys = Object.keys(data[i]); // Get the keys to work inside
+    // Use connect method to connect to the server
+    MongoClient.connect(url, function(err, client) {
+        assert.equal(null, err);
+        console.log("Connected successfully to server");
         
-        for (var j = 0; j < keys.length; j++) {
-            console.log(data[i][keys[j]]);
+        const db = client.db(dbName);
+        
+        for (var i = 0; i < data.length; i++) {
+            let keys = Object.keys(data[i]); // Get the keys to work inside
+            
+            for (var j = 0; j < keys.length; j++) {
+                console.log(data[i][keys[j]]);
+            }
             
             /*****************
              * Code to check the database existence of contest
              * and if not insert it and put the status of some
              * new contest in the country.
              ******************/
-             
+            let search_restriction = {'nome': data[i].nome};
+            let to_add = data[i];
+            
+            findDocuments(db, search_restriction, 
+            (result) => {
+                
+                console.log("result is: ");
+                console.log(result);
+                
+                if(result.length === 0) {
+                insertDocument(db, to_add, 
+                    () => {
+                        console.log("Inserted elements: " + to_add)
+                        findDocuments(db, {}, () => client.close());
+                    }
+                );
+                }
+                else{
+                    console.log("None element Inserted");
+                    findDocuments(db, {}, () => client.close());
+                }
+        
+            });
+            console.log("\n");
         }
-        console.log("\n");
-    }
+        
+        // var restriction = {a: {$in: [1, 2]}};
+        
+    });
     
     /**
      * Code for checking if some event is no longer present in the list
@@ -280,3 +362,5 @@ function collect_contests(callback) {
 }
 
 collect_contests(register_in_db);
+
+// console.log("IP: " + process.env.IP);
