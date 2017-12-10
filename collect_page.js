@@ -14,7 +14,7 @@
 "use strict";
 
 let express = require('express');
-let fs = require('fs');
+let fs      = require('fs');
 let request = require('request');
 let cheerio = require('cheerio');
 let app     = express();
@@ -172,7 +172,6 @@ const url = 'mongodb://localhost';
 
 // Database Name
 const dbName = 'Base_Concurseiro';
-
 
 const insertDocument = function(db, insert_element, callback) {
   // Get the documents collection
