@@ -43,7 +43,7 @@ const mongo   = require('mongodb');
 
 let db = undefined;
 let mongo_client = undefined;
-const port = 8080
+const port = 8081
 
 /*******************************************************
  * Connection to Database Instructions and functions   *
@@ -88,8 +88,8 @@ app.get('/retrieve_contests', (request, response) => {
     publico = request.query.publico;
   }
   
-  text_response += publico + " | " + estado;
-  text_response += "</b>";
+  // text_response += publico + " | " + estado;
+  // text_response += "</b>";
   
   /*****************
    * Code to check the database existence of contest
@@ -97,15 +97,28 @@ app.get('/retrieve_contests', (request, response) => {
    * new contest in the country.
    ******************/
   // let search_restriction = {'profissionais': request.query.publico};
-  console.log(estado);
-  let search_restriction = {'profissionais': {'$regex': publico, '$options': 'i'}, 'estado':{'$regex': estado}};
+  console.log(estado + " " + publico);
+  let search_restriction = {'profissionais': {'$regex': publico, '$options': 'i'}, 'estado':{'$regex': estado}, 'ativo': 1};
   
   findDocuments(db, search_restriction, 
   (result) => {
+    // for(let i = 0; i < result.length; i++) {
+    //   text_response += "<br/>" + result[i].nome;
+    // }
+    // response.send(text_response);
+    let clone = [];
     for(let i = 0; i < result.length; i++) {
-      text_response += "<br/>" + result[i].nome;
+      clone[i] = {
+        'estado': result[i].estado,
+        'nome': result[i].nome,
+        'profissionais': result[i].profissionais,
+        'link': result[i].link,
+        'vagas': result[i].vagas,
+        'data_inicio': result[i].data_inicio
+      }
     }
-    response.send(text_response);
+    // response.json(result);
+    response.json(clone);
   });
   
 });
@@ -117,3 +130,5 @@ app.listen(port, (err) => {
 
   console.log(`server is listening on ${port}`)
 })
+
+module.exports.app = app;

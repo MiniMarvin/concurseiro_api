@@ -74,3 +74,4 @@ const removeDocuments = function(db, delete_pattern, callback) {
     callback(result);
   });    
 }
+

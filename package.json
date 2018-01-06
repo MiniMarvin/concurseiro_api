@@ -4,9 +4,10 @@
   "description": "Make a web scraping from https://www.concursosnobrasil.com.br/ to get concurse information and them show to any user useing API.AI",
   "main": "server.js",
   "scripts": {
-    "start": "npm run-script collect_pages | npm run-script retrieve_contests",
+    "start": "npm run-script collect_pages | npm run-script api_concursos | npm run-script start_webapp",
     "collect_pages": "node collect_page.js",
-    "retrieve_contests": "node retrieve_contests.js"
+    "api_concursos": "node retrieve_contests.js",
+    "start_webapp": "node index.js"
   },
   "author": "Caio Moreira Gomes",
   "dependencies": {

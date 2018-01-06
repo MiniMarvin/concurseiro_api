@@ -230,6 +230,16 @@ const removeDocuments = function(db, delete_pattern, callback) {
     callback(result);
   });    
 };
+
+const updateDocuments = function(db, update_pattern, new_value, callback) {
+  const collection = db.collection('documents');
+  collection.updateOne(
+    update_pattern, 
+    {$set: new_value}
+  ).then(function(result) {
+    callback(result);
+  });
+}
 //-----------------------------------------------------//
 
 let data_obj = function (){};
@@ -259,6 +269,9 @@ String.prototype.capitalize = function() {
  * TODO: add the data extracted from the page into a json.
  */
 function getConcurso(state, callback) {
+    
+    // Recupera a data atual
+    let now_date = new Date(Date.now()).toISOString()
     
     // let sname = state.toLowerCase().capitalize();
     let sname = state;
@@ -295,7 +308,9 @@ function getConcurso(state, callback) {
                            'nome': $(vacancy[0]).text(),
                            'profissionais': professionals.text(),
                            'link': $(links[0]).attr('href'),
-                           'vagas': $(data[1]).text()
+                           'vagas': $(data[1]).text(),
+                           'data_inicio': now_date,
+                           'ativo': 1
                         });
                     }
                 });
@@ -339,42 +354,19 @@ function register_in_db(data) {
         findDocuments(db, search_restriction, 
         (result) => {
             
-            // console.log("result is: ");
-            // console.log(result);
-            
             if(result.length === 0) {
-                // insertDocument(db, to_add, 
-                //     () => {
-                //         console.log("Inserted elements: " + to_add)
-                //    }
-                // );
-                insertDocument(db, to_add).then((resolve)=>{
-                    console.log("Inserted elements: " + to_add);
-                }).catch((err)=>{
-                    console.log(err);
-                });
+                insertDocument(db, to_add, () => {});
             }
             else{
-                // console.log("None element Inserted");
+                updateDocuments(db, search_restriction, {'ativo': 1});
             }
         });
-        // console.log("\n");
     }
-    
-    /**
-     * Code for checking if some event is no longer present in the list
-     * it means, the contest is closed!
-     **/
-    
-    // console.log("CALLBACK DATA!!!!!!");
-    // console.log("----------------------------------------------------");
 }
 
-let haha = 0;
 function collect_contests(callback) {
     let keys = Object.keys(estados);
-    haha += 1;
-    // console.log("haha: "+ haha);
+    console.log("collecting data")
     
     for (var i = 0; i < keys.length; i++) {
         // console.log("trying: " + keys[i]);
@@ -391,4 +383,4 @@ MongoClient.connect(url, function(err, client) {
 });
 
 // collect_contests(register_in_db);
-let timer = setInterval(() => collect_contests(register_in_db), 10000);
+let timer = setInterval(() => collect_contests(register_in_db), 60000);
