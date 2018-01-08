@@ -27,8 +27,6 @@
  * 
  * This software aims to give to the user the availeable public contests in Brazil
  * working like an API software.
- * 
- * TODO: Put the API return in a json value against a simple text value
  **/
 
 "use strict";
@@ -44,7 +42,7 @@ const mongo   = require('mongodb');
 
 let db = undefined;
 let mongo_client = undefined;
-const port = 3002;
+const port = 8080;
 
 /*******************************************************
  * Connection to Database Instructions and functions   *
@@ -78,14 +76,14 @@ MongoClient.connect(url, function(err, client) {
 /********************************************************/
 
 /**
- * Allow Origin
+ * Allow Any Origin
  */
 const cors = require('cors');
 app.use(cors());
 
 
 app.get('/api_concurso', (request, response) => {
-  let text_response = "<b>Concursos para "
+  console.log("new connection at API");
   let estado = "";
   let publico = "";
   
@@ -96,24 +94,15 @@ app.get('/api_concurso', (request, response) => {
     publico = request.query.publico;
   }
   
-  // text_response += publico + " | " + estado;
-  // text_response += "</b>";
-  
   /*****************
    * Code to check the database existence of contest
    * and if not insert it and put the status of some
    * new contest in the country.
    ******************/
-  // let search_restriction = {'profissionais': request.query.publico};
-  console.log(estado + " " + publico);
   let search_restriction = {'profissionais': {'$regex': publico, '$options': 'i'}, 'estado':{'$regex': estado}, 'ativo': 1};
   
   findDocuments(db, search_restriction, 
   (result) => {
-    // for(let i = 0; i < result.length; i++) {
-    //   text_response += "<br/>" + result[i].nome;
-    // }
-    // response.send(text_response);
     let clone = [];
     for(let i = 0; i < result.length; i++) {
       clone[i] = {
@@ -125,13 +114,12 @@ app.get('/api_concurso', (request, response) => {
         'data_inicio': result[i].data_inicio
       }
     }
-    // response.json(result);
     response.json(clone);
   });
   
 });
 
-app.listen(port, (err) => {
+app.listen(port || process.env.port, (err) => {
   if (err) {
     return console.log('something bad happened', err)
   }

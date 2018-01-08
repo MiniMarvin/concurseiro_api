@@ -42,6 +42,7 @@ let cheerio = require('cheerio');
 let app     = express();
 let _       = require('lodash');
 let mongo   = require('mongodb');
+let http    = require('http');
 
 let estados = {
     // Define a região de cada estado
@@ -266,14 +267,12 @@ String.prototype.capitalize = function() {
 /**
  * Obtém todos os concursos vigentes em um determinado estado, para encontrar
  * todos os do país basta utilizar a função para cada um dos estados nacionais.
- * TODO: add the data extracted from the page into a json.
  */
 function getConcurso(state, callback) {
     
     // Recupera a data atual
     let now_date = new Date(Date.now()).toISOString()
     
-    // let sname = state.toLowerCase().capitalize();
     let sname = state;
     
     let acronym = "";
@@ -281,10 +280,6 @@ function getConcurso(state, callback) {
     
     let url = "https://www.concursosnobrasil.com.br/concursos/" + acronym;
     let data_list = [];
-    
-    // console.log(url);
-    // console.log(state);
-    // console.log(acronym);
     
     request(url, function(error, response, html) {
         if(!error){
@@ -320,7 +315,6 @@ function getConcurso(state, callback) {
         callback(data_list);
     });
     
-    // callback(data_list);
 }
 
 /**
@@ -328,8 +322,6 @@ function getConcurso(state, callback) {
  * It will be executed as a callback of the getConcurso function
  **/
 function register_in_db(data) {
-    // console.log("----------------------------------------------------");
-    // console.log("CALLBACK DATA!!!!!!");
 
     if(db === undefined) {
         console.log("Database not connected yet!");
@@ -338,10 +330,6 @@ function register_in_db(data) {
 
     for (var i = 0; i < data.length; i++) {
         let keys = Object.keys(data[i]); // Get the keys to work inside
-        
-        // for (var j = 0; j < keys.length; j++) {
-        //     console.log(data[i][keys[j]]);
-        // }
         
         /*****************
          * Code to check the database existence of contest
@@ -369,18 +357,19 @@ function collect_contests(callback) {
     console.log("collecting data")
     
     for (var i = 0; i < keys.length; i++) {
-        // console.log("trying: " + keys[i]);
         getConcurso(keys[i], callback);
     }
 }
 
 MongoClient.connect(url, function(err, client) {
     assert.equal(null, err);
-    console.log("Connected successfully to server");
+    console.log("Connected successfully to server by the contest retriever");
     
     db = client.db(dbName);
     mongo_client = client;
 });
 
-// collect_contests(register_in_db);
 let timer = setInterval(() => collect_contests(register_in_db), 60000);
+let keep_alive = setInterval( () => {
+    http.get("localhost");
+}, 300000)
