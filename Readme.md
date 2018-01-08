@@ -9,7 +9,19 @@ O sistema será disponibilizado nas seguintes plataformas:
 * Um bot de página de facebook que realiza um post toda vez que surge um novo concurso
 * Um bot de twitter que realiza um post toda vez que surge um novo concurso
 * Um bot de messenger que permite ao usuário se inscrever para receber atualizações toda vez que sair alguma
- 
+
+### Como a API funciona?
+A API do concurseiro é uma API Restful que recebe dois parãmetros, a Sigla do estado brasileiro desejado e o público desejado, o funcionamento é com Regex, ou seja, funciona com frações das siglas ou do público desejado, retornando todos os concursos abertos quando consultada sem nenhum parâmetro.
+O retorno da API segue a seguinte estrutura:
+{
+    'estado': O estado em que o concurso está aberto,
+    'nome': O nome do concurso,
+    'profissionais': A formação da pessoa para aplicar para o concurso,
+    'link': O link no Concursos do Brasil explicando o concurso,
+    'vagas': O número de vagas do concurso,
+    'data_inicio': a data que o sistema recuperou o concurso do Concursos no Brasil
+}
+
 ### Lista de TODOs
     [OK]    Web Crawler de concursos
     [OK]    Configurar o banco de dados
@@ -17,7 +29,8 @@ O sistema será disponibilizado nas seguintes plataformas:
     [OK]    Construir o serviço para fazer o update periodicamente
     [OK]    Construir a API para se comunicar com o cliente
     [OK]    Desenvolver o Webapp
-    [TODO]  Colocar no Heroku o Webapp
+    [OK]    Deploy da API
+    [OK]    Deploy do Webapp
     [TODO]  Construir o fluxo do chatbot
     [TODO]  Desenvolver a estrutura server-chatbot
     [TODO]  Colocar o chatbot no Heroku
@@ -36,6 +49,18 @@ This system is intent to run in the followeing platforms:
 * A Twitter profile which make a post every new contest is oppened
 * A Messenger chatbot which will works as a consultant to the contests and a Feed list allowing people to sub and unsub
 
+### How the API Works?
+The concurseiro's API is a Restful API which returns all the oppened constests in Brazil, it recieves two params, the "estado" which is the brazilian state you want to achieve and the "publico" which is the formation of the people necessary to apply to the contest.
+The API result structure is the following:
+{
+    'estado': The brazilian state where the contest have been oppened,
+    'nome': The contest name,
+    'profissionais': The professionals necessary formation,
+    'link': The link where you can read more about the contest,
+    'vagas': The vacancy number for the contest,
+    'data_inicio': The date which the bot retrieved the contest from "Concursos no Brasil"
+}
+
 ### Todo List
     [OK]    Contests Web Crawler
     [OK]    Configure the database
@@ -43,7 +68,8 @@ This system is intent to run in the followeing platforms:
     [OK]    Build the service which updates list time to time
     [OK]    Build the API service to communicate with the client
     [OK]    Build Webapp to show the contests data
-    [TODO]  Push into Heroku Webapp
+    [OK]    Deploy API - https://concurseiro.herokuapp.com/api_concurso
+    [OK]    Deploy Webapp
     [TODO]  Make the chatbot flux to get this data
     [TODO]  Make the server-chatbot structure
     [TODO]  Push into Heroku Chatbot
