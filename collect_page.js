@@ -185,6 +185,11 @@ let estados = {
 let mongo_client = undefined;
 let db = undefined;
 
+// setup the app configs
+// var env = process.env.NODE_ENV || 'development';
+var env = 'production';
+var config = require('./config')[env];
+
 /*******************************************************
  * Connection to Database Instructions and functions   *
  *******************************************************/
@@ -192,10 +197,10 @@ const MongoClient = mongo.MongoClient;
 const assert = require('assert');
 
 // Connection URL
-const url = 'mongodb://localhost';
+const uri = config.database.uri;
 
 // Database Name
-const dbName = 'Base_Concurseiro';
+const dbName = config.database.db;
 
 const insertDocument = function(db, insert_element, callback) {
   // Get the documents collection
@@ -361,7 +366,7 @@ function collect_contests(callback) {
     }
 }
 
-MongoClient.connect(url, function(err, client) {
+MongoClient.connect(uri, function(err, client) {
     assert.equal(null, err);
     console.log("Connected successfully to server by the contest retriever");
     
@@ -370,6 +375,3 @@ MongoClient.connect(url, function(err, client) {
 });
 
 let timer = setInterval(() => collect_contests(register_in_db), 60000);
-let keep_alive = setInterval( () => {
-    http.get("localhost");
-}, 300000)

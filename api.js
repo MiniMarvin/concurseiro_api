@@ -44,17 +44,22 @@ let db = undefined;
 let mongo_client = undefined;
 const port = 8080;
 
+// setup the app configs
+// var env = process.env.NODE_ENV || 'development';
+var env = 'production';
+var config = require('./config')[env];
+
 /*******************************************************
  * Connection to Database Instructions and functions   *
  *******************************************************/
 const MongoClient = mongo.MongoClient;
 const assert = require('assert');
 
-// Connection URL
-const url = 'mongodb://localhost';
+// Connection URI
+const uri = config.database.uri;
 
 // Database Name
-const dbName = 'Base_Concurseiro';
+const dbName = config.database.db;
 
 const findDocuments = function(db, restriction, callback) {
   // Get the documents collection
@@ -66,7 +71,7 @@ const findDocuments = function(db, restriction, callback) {
   });
 };
 
-MongoClient.connect(url, function(err, client) {
+MongoClient.connect(uri, function(err, client) {
     assert.equal(null, err);
     console.log("Connected successfully to server");
     
