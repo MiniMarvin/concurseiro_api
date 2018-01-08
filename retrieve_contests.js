@@ -44,7 +44,7 @@ const mongo   = require('mongodb');
 
 let db = undefined;
 let mongo_client = undefined;
-const port = 8081
+const port = 3002;
 
 /*******************************************************
  * Connection to Database Instructions and functions   *

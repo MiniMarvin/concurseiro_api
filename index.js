@@ -5,7 +5,8 @@ const express = require("express");
 var app = express();
 const path = require("path");
 
-const server_port = 8080;
+const server_port = 3001;
+// const server_port = 80;
 
 // setup every single file necessary
 app.use('/', express.static('webapp'));

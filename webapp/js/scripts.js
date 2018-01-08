@@ -323,7 +323,8 @@
     });
     
     function make_search(publico, estado) {
-        var api_link = "https://netnode-minimarvin.c9users.io:8081/api_concurso";
+        var api_link = "/api_concurso";
+        // var api_link = "https://concurseiro.herokuapp.com:8081/api_concurso";
         if(estado === "...") {
             estado = "";
         }
