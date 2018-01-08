@@ -14,9 +14,9 @@ O sistema será disponibilizado nas seguintes plataformas:
     [OK]    Web Crawler de concursos
     [OK]    Configurar o banco de dados
     [OK]    Fazer a aplicação que registra no MongoDB
-    [TODO]  Construir o serviço para fazer o update periodicamente
-    [TODO]  Construir a API para se comunicar com o cliente
-    [TODO]  Desenvolver o Webapp
+    [OK]    Construir o serviço para fazer o update periodicamente
+    [OK]    Construir a API para se comunicar com o cliente
+    [OK]    Desenvolver o Webapp
     [TODO]  Colocar no Heroku o Webapp
     [TODO]  Construir o fluxo do chatbot
     [TODO]  Desenvolver a estrutura server-chatbot
@@ -40,9 +40,9 @@ This system is intent to run in the followeing platforms:
     [OK]    Contests Web Crawler
     [OK]    Configure the database
     [OK]    Application to put data into MongoDB
-    [TODO]  Build the service which updates list time to time
-    [TODO]  Build the API service to communicate with the client
-    [TODO]  Build Webapp to show the contests data
+    [OK]    Build the service which updates list time to time
+    [OK]    Build the API service to communicate with the client
+    [OK]    Build Webapp to show the contests data
     [TODO]  Push into Heroku Webapp
     [TODO]  Make the chatbot flux to get this data
     [TODO]  Make the server-chatbot structure
