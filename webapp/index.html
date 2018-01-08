@@ -46,10 +46,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!--search engine-->
 <div class = "row">
 	<div class="form-group search-group float-center">
-		<input class="form-control contest-bar" type="text" placeholder="Digite o concurso" name="concurso">
-	    <button class="btn btn-danger search-button"><i class="fa fa-search"></i></button>
+		<input class="form-control contest-bar" type="text" placeholder="Digite o publico que deseja" name="concurso" id="search-bar">
+	    <button class="btn btn-danger search-button" id="search-button"><i class="fa fa-search"></i></button>
 	    <br/>
-	    <select class="form-control search-estado" id="estados">
+	    <select class="form-control search-estado" id="estados" name="estados">
 			<option>...</option>
 			<option>AC</option>
 			<option>AL</option>
@@ -102,16 +102,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<th>Estado</th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr>
-									<!--Todo: Colocar responsivamente os dados na tabela
+							<tbody id="contest-list">
+								<!--Todo: Colocar responsivamente os dados na tabela
 									tendo como definição um clicável que define o estado
 									com os filtros de busca e de ordenação.-->
+								<!--
+								<tr>
 									<th scope="row">1</th>
 									<td>SETRABES/RR - Secretaria do Trabalho e Bem-Estar Social de Roraima</td>
 									<td>Advogado</td>
 									<td><h5>RR</h5></td>
 								</tr>
+								-->
 							</tbody>
 						</table>
 					</div>
@@ -123,7 +125,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  <!-- footer -->
 		  <div class="footer">
 			<div class="wthree-copyright">
-			  <p>© 2017 Visitors. All rights reserved | Design by <a href="http://w3layouts.com">W3layouts</a></p>
+				<p>© 2018 Visitors v1.0. All rights reserved to Caio Gomes | Design by <a href="http://w3layouts.com">W3layouts</a></p>
+				<small	style="font-size: 15px;">Obs: Essa primeira versão só carrega até 20 concursos por consulta, mais features estão em desenvolvimento, aguarde ;D</small	>
 			</div>
 		  </div>
   <!-- / footer -->

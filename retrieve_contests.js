@@ -37,7 +37,8 @@ const express = require('express');
 const fs      = require('fs');
 const request = require('request');
 const cheerio = require('cheerio');
-const app     = express();
+// const app     = express();
+var app = module.exports = express();
 const _       = require('lodash');
 const mongo   = require('mongodb');
 
@@ -76,7 +77,14 @@ MongoClient.connect(url, function(err, client) {
 });
 /********************************************************/
 
-app.get('/retrieve_contests', (request, response) => {
+/**
+ * Allow Origin
+ */
+const cors = require('cors');
+app.use(cors());
+
+
+app.get('/api_concurso', (request, response) => {
   let text_response = "<b>Concursos para "
   let estado = "";
   let publico = "";
@@ -128,7 +136,5 @@ app.listen(port, (err) => {
     return console.log('something bad happened', err)
   }
 
-  console.log(`server is listening on ${port}`)
+  console.log(`API server is listening on ${port}`)
 })
-
-module.exports.app = app;

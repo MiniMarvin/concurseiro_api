@@ -1,6 +1,13 @@
 (function ($) {
     "use strict";
+    
+    var initialLoad = true;
     $(document).ready(function () {
+        /* Updates the list with the first state */
+        if (initialLoad) {
+            make_search("", "");
+        }
+        
         /*==Left Navigation Accordion ==*/
         if ($.fn.dcAccordion) {
             $('#nav-accordion').dcAccordion({
@@ -284,9 +291,71 @@
         // popovers
 
         $('.popovers').popover();
-
-
+    
+        
     });
-
+    
+    
+    // --------- Controls the search engine ------------ //
+    // TODO: add the search tips in the search bar with what exists in the database
+    $("#search-bar").keypress(function(key) {
+        var publico = $('#search-bar').val();
+        var estado  = $('select[name=estados]').val()
+        
+        if (key.which == 13) {
+            $("#contest-list").fadeIn(1, function(){
+                console.log("publico: " + publico + " estado: " + estado)
+                $("#contest-list").html("");
+                make_search(publico, estado);
+            });
+        }
+    });
+    
+    $("#search-button").click(function() {
+        var publico = $('#search-bar').value;
+        var estado  = $('select[name=estados]').val();
+        
+        $("#contest-list").fadeIn(1, function(){
+            console.log("publico: " + publico + " estado: " + estado)
+            $("#contest-list").html("");
+            make_search(publico, estado);
+        });
+    });
+    
+    function make_search(publico, estado) {
+        var api_link = "https://netnode-minimarvin.c9users.io:8081/api_concurso";
+        if(estado === "...") {
+            estado = "";
+        }
+        if(publico === undefined) {
+            publico = "";
+        }
+        
+        estado = estado.toLowerCase();
+        publico = publico.toLowerCase();
+        
+        $.get(api_link, {'estado': estado, 'publico': publico}).done(function (data) {
+            console.log("estado: " + estado + " publico: " + publico)
+			console.log(data);
+			
+            var append_data = '<tr>'+
+				'<td colspan="3" class="contest-data">Nenhum concurso encontrado para ' + publico + ' em ' + estado + '</td>' +
+			'</tr>';
+            for (var i = 0; i < 15 && i < data.length; i++) {
+                append_data = '<tr class="contest-data">' +
+						'<th scope="row">' + data[i].vagas + '</th>' +
+						'<td>' + '<a href="' + data[i].link + '">' + data[i].nome + '</a></td>' +
+						'<td>' + data[i].profissionais + '</td>' +
+						'<td><h5>' + data[i].estado.toUpperCase() + '</h5></td>' + 
+					'</tr>';
+                $("#contest-list").append(append_data);
+            }
+            if(data.length == 0) {
+				$("#contest-list").html("").append(append_data);
+            }
+            initialLoad = false;
+        })
+    }
+    
 
 })(jQuery);
